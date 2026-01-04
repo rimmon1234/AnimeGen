@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Random Anime Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      font-size: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 6px;
+      background: #334155;
+      color: white;
+      border: 1px solid #475569;
+    }
+
+    .card {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+      background: #0f172a;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .card img {
+      width: 200px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #334155;
+    }
+
+    .info {
+      flex: 1;
+    }
+
+    .genres span {
+      background: #334155;
+      padding: 4px 8px;
+      margin: 3px;
+      display: inline-block;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .label {
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Random Anime Generator</h1>
+
+    <div style="display:flex; gap:10px; justify-content:center; margin-bottom:15px;">
+      <select id="filter">
+        <option value="">All Types</option>
+        <option value="tv">TV</option>
+        <option value="movie">Movie</option>
+        <option value="ova">OVA</option>
+      </select>
+      <button id="randomBtn">Generate</button>
+    </div>
+
+    <div id="card" class="card">
+      <img id="cover" src="" alt="Preview" />
+      <div class="info">
+        <h2 id="title">Click Generate</h2>
+        <p class="label">Score: <span id="score">—</span></p>
+        <p class="label">Type: <span id="type">—</span> • Episodes: <span id="episodes">—</span> • Year: <span id="year">—</span></p>
+        <div class="genres" id="genres"></div>
+        <p id="synopsis">Anime description will appear here.</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+const randomBtn = document.getElementById('randomBtn');
+const filter = document.getElementById('filter');
+const cover = document.getElementById('cover');
+const titleEl = document.getElementById('title');
+const scoreEl = document.getElementById('score');
+const typeEl = document.getElementById('type');
+const episodesEl = document.getElementById('episodes');
+const yearEl = document.getElementById('year');
+const synopsisEl = document.getElementById('synopsis');
+const genresEl = document.getElementById('genres');
+
+async function fetchRandomAnime(limitType) {
+  const base = 'https://api.jikan.moe/v4/random/anime';
+  for (let i = 0; i < 5; i++) {
+    const res = await fetch(base);
+    const json = await res.json();
+    const d = json.data;
+    if (!limitType || d.type.toLowerCase() === limitType.toLowerCase()) return d;
+  }
+  return null;
+}
+
+function updateUI(d) {
+  if (!d) {
+    titleEl.textContent = 'No matching anime found';
+    return;
+  }
+  titleEl.textContent = d.title;
+  scoreEl.textContent = d.score || 'N/A';
+  typeEl.textContent = d.type || '—';
+  episodesEl.textContent = d.episodes || '—';
+  yearEl.textContent = d.year || '—';
+  synopsisEl.textContent = d.synopsis || 'No synopsis available.';
+  cover.src = d.images.jpg.image_url;
+
+  genresEl.innerHTML = '';
+  (d.genres || []).forEach(g => {
+    let tag = document.createElement('span');
+    tag.textContent = g.name;
+    genresEl.appendChild(tag);
+  });
+}
+
+randomBtn.addEventListener('click', async () => {
+  randomBtn.textContent = 'Loading...';
+  randomBtn.disabled = true;
+  const data = await fetchRandomAnime(filter.value);
+  updateUI(data);
+  randomBtn.textContent = 'Generate';
+  randomBtn.disabled = false;
+});
+</script>
+</body>
+</html>

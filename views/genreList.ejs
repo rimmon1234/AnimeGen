@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Genre</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>All Genre List</h1>
+    <hr>
+    <table>
+        <tr >
+            <th><h2>Genre Name</h2></th>
+            <th><h2>Count</h2></th>
+        </tr>
+        <% genres.data.forEach((genre)=>{ %>
+            <tr>
+                <td><center><h1><a href="/genres/<%= genre.name %>/<%= genre.mal_id %>"><%= genre.name %></a></h1></center></td>
+                <td><center><h2><%= genre.count %></h2></center></td>
+            </tr>
+        <%}) %>
+    </table>
+</body>
+</html>

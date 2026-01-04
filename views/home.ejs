@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Anime Gen — Home</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/homepage.css">
+</head>
+<body class="snap-root">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="logo">Anime<span>Gen</span></div>
+    <div class="nav-links">
+      <a href="#listings">All Listings</a>
+      <a href="#random">Random</a>
+      <a href="#genres">Genres</a>
+    </div>
+  </nav>
+
+  <!-- SECTIONS (full screen, one after another) -->
+  <main class="snap-container">
+    <!-- HERO / Welcome -->
+    <section class="panel hero">
+      <div class="panel-inner">
+        <h1 class="big">Enter. Scroll. Discover.</h1>
+        <p class="lead">“We watch not to escape life, but for life not to escape us.”</p>
+
+        <div class="actions">
+          <a class="btn" href="/fullList">📚 View All</a>
+          <a class="btn alt" href="#random">🎲 Random</a>
+          <a class="btn ghost" href="/genreList">🏷 Browse Genres</a>
+        </div>
+
+        <div class="hint">Scroll or use the links above ⬇</div>
+      </div>
+    </section>
+
+    <section id="listings" class="panel listings">
+      <div class="panel-inner">
+        <div class="card glass">
+          <h2>All Anime Listings</h2>
+          <p class="quote">“A library in which the shelves are infinite — the world of anime awaits.”</p>
+          <p>Explore the catalogue with filters, sort, and pagination.</p>
+          <a class="btn" href="/fullList">Open Listings →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="random" class="panel random">
+      <div class="panel-inner">
+        <div class="card glass">
+          <h2>Generate Random Anime</h2>
+          <p class="quote">“Sometimes the smallest random choice leads to the largest adventure.”</p>
+          <p>Not sure what to watch? Let fate pick for you.</p>
+          <a class="btn" href="/random">Generate Now →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="genres" class="panel genres">
+      <div class="panel-inner">
+        <div class="card glass">
+          <h2>Browse by Genres</h2>
+          <p class="quote">“Every story has its own color — find the one that matches you.”</p>
+          <p>Pick a genre and dive deep into themes you love.</p>
+          <a class="btn" href="/genreList">Browse Genres →</a>
+        </div>
+      </div>
+    </section>
+    <section class="panel footer">
+      <div class="panel-inner">
+        <p>Made By — Rimmon Bhowmick</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="/script.js"></script>
+</body>
+</html>

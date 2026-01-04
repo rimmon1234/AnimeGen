@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= query.genreName %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1><%= query.genreName %></h1>
+    <hr>
+<div class="filter-area">
+  <form id="filterForm" action="/genres/<%= query.genreName %>/<%= query.genreId %>" method="GET" class="filter-form">
+    
+    <div class="filter-left">
+      <label class="search-label">
+        <input 
+          type="search" 
+          name="q" 
+          id="searchInput" 
+          placeholder="Search anime..." 
+          value="<%= query.q %>"
+        >
+      </label>
+
+      <label>
+        Status
+        <select name="status">
+        <option value="" <%= query.status === "" ? "selected" : "" %>>Any</option>
+        <option value="complete" <%= query.status === "complete" ? "selected" : "" %>>Finished</option>
+        <option value="airing" <%= query.status === "airing" ? "selected" : "" %>>Airing</option>
+        <option value="upcoming" <%= query.status === "upcoming" ? "selected" : "" %>>Upcoming</option>
+      </select>
+      </label>
+
+      <label>
+        Rating
+        <select name="rating">
+          <option value="" <%= query.rating === "" ? "selected" : "" %>>Any</option>
+          <option value="g" <%= query.rating === "g" ? "selected" : "" %>>G</option>
+          <option value="pg" <%= query.rating === "pg" ? "selected" : "" %>>PG</option>
+          <option value="pg13" <%= query.rating === "pg13" ? "selected" : "" %>>PG-13</option>
+          <option value="r17" <%= query.rating === "r17" ? "selected" : "" %>>R 17+</option>
+          <option value="r" <%= query.rating === "r" ? "selected" : "" %>>R+</option>
+          <option value="rx" <%= query.rating === "rx" ? "selected" : "" %>>Rx</option>
+        </select>
+      </label>
+
+      <label>
+        Sort by
+        <select name="order_by">
+            <option value="" <%= (query.order_by || "") === "" ? "selected" : "" %>>Default</option>
+            <option value="score" <%= query.order_by === "score" ? "selected" : "" %>>Rating</option>
+            <option value="popularity" <%= query.order_by === "popularity" ? "selected" : "" %>>Popularity</option>
+        </select>
+        </label>
+
+        <label>
+        Order
+        <select name="sort">
+            <option value="asc" <%= query.sort === "asc" ? "selected" : "" %>>Ascending</option>
+            <option value="desc" <%= query.sort === "desc" ? "selected" : "" %>>Descending</option>
+        </select>
+        </label>
+
+    </div>
+
+    <div class="filter-right">
+      <button type="submit" class="btn-filter">Filter</button>
+    </div>
+
+  </form>
+</div>
+    <table>
+        <tr >
+            <th>Name</th>
+            <th>Cover</th>
+            <th>Details</th>
+            <th>Genre</th>
+            <th>Status</th>
+            <th>Trailer Link</th>
+            <th>View More</th>
+            <th>Watch Links</th>
+        </tr>
+        <% content.data.forEach((ele)=>{ %>
+            <tr>
+                <td><h2><%= ele.title %></h2></td>
+                <td>
+                  <img 
+                  src="<%= ele.images.jpg.image_url %>" 
+                  alt="No Image Available" 
+                  class="anime-img"
+                  >
+                </td>
+                <td>
+                    <b>
+                        <u>No of episodes:</u> <%= ele.episodes %><br><br>
+                        <u>Running Time:</u> <%= ele.aired.string %><br><br>
+                        <u>Duration:</u> <%= ele.duration %><br><br>
+                        <u>Rating:</u> <%= ele.rating  %> <br><br>
+                        <u>Score:</u> <%= ele.score %><br><br>
+                        <u>Rank:</u> <%= ele.rank %><br><br>
+                        <u>Popularity:</u> <%= ele.popularity %><br><br>
+                        <u>Members:</u> <%=ele.members %><br><br>
+                        <u>Favoutites:</u> <%= ele.favorites %>
+                    </b>
+                </td>
+                <td>
+                  <% ele.genres.forEach((genre)=>{%>
+                      <center><h4><a href="/genres/<%= genre.name %>/<%= genre.mal_id %>"><%= genre.name %></a></h4></center>
+                  <% })  %>
+                </td>
+                <td><center><h4><%= ele.status %></h4></center></td>
+                <td><center><a href="<%= ele.trailer.embed_url %>"><button>View Trailer</button></a></center></td>
+                <td><center><a href="<%= ele.url %>"><button>Get More Detail</button></a></center></td>
+                <td>
+                    <a href="https://hianime.nz/search?keyword=<%= ele.title %>"><u><button>link 1</button></u></a><br><br>
+                    <a href="https://aniwave.com.pl/?s=<%= ele.title %>"><u><button>link 2</button></u></a><br><br>
+                </td>
+            </tr>
+        <%}) %>
+    </table>
+    <div class="pagination-container">
+    <form action="/genres/<%= query.genreName %>/<%= query.genreId %>" method="GET">
+        <input type="hidden" name="q" value="<%= query.q %>">
+        <input type="hidden" name="status" value="<%= query.status %>">
+        <input type="hidden" name="order_by" value="<%= query.order_by %>">
+        <input type="hidden" name="sort" value="<%= query.sort %>">
+        <% if (content.pagination.current_page > 1) { %>
+            <button type="submit" name="page" value="<%= content.pagination.current_page - 1 %>">Prev</button>
+        <% } %>
+    </form>
+    <% if (content.pagination.current_page > 2) { %>
+            <a class="page-link" href="/genres/<%= query.genreName %>/<%= query.genreId %>?page=<%= content.pagination.current_page - 2 %>&q=<%= query.q %>&status=<%= query.status %>&rating=<%= query.rating %>&order_by=<%= query.order_by %>&sort=<%= query.sort %>"><%= content.pagination.current_page - 2 %></a>
+            <a class="page-link" href="/genres/<%= query.genreName %>/<%= query.genreId %>?page=<%= content.pagination.current_page - 1 %>&q=<%= query.q %>&status=<%= query.status %>&rating=<%= query.rating %>&order_by=<%= query.order_by %>&sort=<%= query.sort %>"><%= content.pagination.current_page - 1 %></a>
+    <% } %>
+    <span class="page-current"><%= content.pagination.current_page  %></span>
+    <% if (content.pagination.current_page < content.pagination.last_visible_page-2) { %>
+            <a class="page-link" href="/genres/<%= query.genreName %>/<%= query.genreId %>?page=<%= content.pagination.current_page + 1 %>&q=<%= query.q %>&status=<%= query.status %>&rating=<%= query.rating %>&order_by=<%= query.order_by %>&sort=<%= query.sort %>"><%= content.pagination.current_page + 1 %></a>
+            <a class="page-link" href="/genres/<%= query.genreName %>/<%= query.genreId %>?page=<%= content.pagination.current_page + 2 %>&q=<%= query.q %>&status=<%= query.status %>&rating=<%= query.rating %>&order_by=<%= query.order_by %>&sort=<%= query.sort %>"><%= content.pagination.current_page + 2 %></a>
+    <% } %>
+    <form action="/genres/<%= query.genreName %>/<%= query.genreId %>" method="GET">
+        <input type="hidden" name="q" value="<%= query.q %>">
+        <input type="hidden" name="status" value="<%= query.status %>">
+        <input type="hidden" name="order_by" value="<%= query.order_by %>">
+        <input type="hidden" name="sort" value="<%= query.sort %>">
+        <% if (content.pagination.current_page < content.pagination.last_visible_page-1) { %>
+            <button type="submit" name="page" value="<%= content.pagination.current_page + 1 %>">Next</button>
+        <% } %>
+    </form>
+</div>
+</body>
+</html>
